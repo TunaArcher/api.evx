@@ -7,4 +7,5 @@ const config = require('config');
 const PORT = config.get('PORT');
 
 const app = require('./app');
-app.listen(PORT, () => console.log(`Server is running in ${NODE_ENV} mode on port: ${PORT}`));
+const { logger } = require('./utils/logger');
+app.listen(PORT, () => logger.info(`Server is running in ${NODE_ENV} mode on port: ${PORT}`));
