@@ -55,8 +55,8 @@ const login = AsyncHandler(async (req, res) => {
 
         const responseData = {
             id: user.id,
-            username: user.firstname,
-            email: user.email,
+            phone: user.phone,
+            status: user.status,
             token: generateToken(user.id),
         };
 
