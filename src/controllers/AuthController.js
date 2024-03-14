@@ -14,11 +14,12 @@ const { generate: generateToken } = require('../utils/token');
  * @access public
  */
 const register = AsyncHandler(async (req, res) => {
-    const { firstname, lastname, email, password } = req.body;
+    const { phone, password, firstname, lastname } = req.body;
 
     try {
         // create user
-        const user = new User(firstname, lastname, email, hashPassword(password.trim()));
+        const user = new User(phone, hashPassword(password.trim()), firstname, lastname);
+        console.log(user);
         const createUser = await user.save();
 
         if (!createUser) throw new ApiError('Internal Server Error! Server failed creating new user.');
@@ -41,25 +42,22 @@ const register = AsyncHandler(async (req, res) => {
  * @access public
  */
 const login = AsyncHandler(async (req, res) => {
-    const { email, password } = req.body;
+    const { phone, password } = req.body;
 
     try {
-        const user = await User.findByEmail(email);
+        const user = await User.findByPhone(phone);
         const authenticate = user && comparePassword(password.trim(), user.password);
-
         if (!authenticate) {
             throw new ApiError('Invalid credentials!', StatusCodes.UNAUTHORIZED, {
-                credentials: { email, password },
+                credentials: { phone, password },
             });
         }
 
         const responseData = {
-            user: {
-                id: user.id,
-                username: user.firstname,
-                email: user.email,
-                token: generateToken(user.id),
-            },
+            id: user.id,
+            phone: user.phone,
+            status: user.status,
+            token: generateToken(user.id),
         };
 
         res.status(StatusCodes.OK).json(ApiResponse('User logged in successfully.', responseData));
