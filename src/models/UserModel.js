@@ -75,6 +75,12 @@ class User {
         return rows;
     }
 
+    static async findById(id) {
+        const sql = `SELECT * FROM users WHERE id = '${id}'`;
+        const [rows] = await pool.execute(sql);
+        return rows[0];
+    }
+
     static async findByPhone(phone) {
         const sql = `SELECT * FROM users WHERE phone = '${phone}'`;
         const [rows] = await pool.execute(sql);
