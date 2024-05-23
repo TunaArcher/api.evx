@@ -14,9 +14,11 @@ const { StatusCodes } = require('http-status-codes');
 const router = express.Router();
 const AuthRoutes = require('./AuthRoutes');
 const UserRoutes = require('./UserRoutes');
+const ProfileRoutes = require('./profileRoutes');
 
 // assign prefix - to routes
 router.use('/auth', AuthRoutes);
 router.use('/user', UserRoutes);
+router.use('/profile', ProfileRoutes);
 
 module.exports = router;

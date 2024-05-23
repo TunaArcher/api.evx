@@ -58,6 +58,9 @@ const login = AsyncHandler(async (req, res) => {
             phone: user.phone,
             status: user.status,
             token: generateToken(user.id),
+            email: user.email,
+            firstname: user.firstname,
+            lastname: user.lastname
         };
 
         res.status(StatusCodes.OK).json(ApiResponse('User logged in successfully.', responseData));
