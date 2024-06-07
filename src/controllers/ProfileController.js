@@ -4,6 +4,7 @@ const ApiError = require('./error/ApiError');
 const ApiResponse = require('./response/ApiResponse');
 
 const Profile = require('../models/ProfileModels');
+const Password = require('../models/PasswordModels');
 const User = require('../models/UserModel');
 
 const { hash: hashPassword, compare: comparePassword } = require('../utils/password');
@@ -51,14 +52,14 @@ const porfileData = AsyncHandler(async (req, res) => {
 
     try {
         const prifile = await User.findById(id);
-       
+
         const responseData = {
             id: prifile.id,
             phone: prifile.phone,
             status: prifile.status,
             email: prifile.email,
             firstname: prifile.firstname,
-            lastname: prifile.lastname
+            lastname: prifile.lastname,
         };
 
         res.status(StatusCodes.OK).json(ApiResponse('Profile Get is successfully.', responseData));
@@ -67,7 +68,38 @@ const porfileData = AsyncHandler(async (req, res) => {
     }
 });
 
+const updatePassword = AsyncHandler(async (req, res) => {
+    const { id, oldPass, newPass, confNewPass } = req.body;
+    let options = {
+        id: id,
+        password: oldPass,
+        newPassword: hashPassword(newPass.trim()),
+        confNewPassword: hashPassword(confNewPass.trim()),
+    };
+
+    try {
+        
+        // update profile
+        const profile_data = await Password.findByIdAndUpdatePassword(id, options);
+
+        if (!profile_data) throw new ApiError('Internal Server Error! Server failed creating update profile.');
+
+        const responseData = {
+            token_update: generateToken(profile_data),
+        };
+
+        res.status(StatusCodes.CREATED).json(
+            ApiResponse('password updated successfully.', responseData, StatusCodes.CREATED)
+        );
+
+        // res.status(StatusCodes.OK).json(ApiResponse('User logged in successfully.', responseData));
+    } catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
+    }
+});
+
 module.exports = {
     updateProfile,
-    porfileData
+    porfileData,
+    updatePassword,
 };
