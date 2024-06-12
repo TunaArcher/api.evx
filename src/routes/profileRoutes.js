@@ -20,6 +20,7 @@ Router
 ==============================*/
 router.post('/update_profile', HandleBadRequest, ProfileController.updateProfile);
 router.post('/get_profile', HandleBadRequest, ProfileController.porfileData);
+router.post('/update_password', HandleBadRequest, ProfileController.updatePassword);
 
 
 module.exports = router;
