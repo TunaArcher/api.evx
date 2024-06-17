@@ -14,12 +14,11 @@ const { generate: generateToken } = require('../utils/token');
  * @access public
  */
 const register = AsyncHandler(async (req, res) => {
-    const { phone, password, firstname, lastname } = req.body;
+    const { phone, password, firstname, lastname, email } = req.body;
 
     try {
         // create user
-        const user = new User(phone, hashPassword(password.trim()), firstname, lastname);
-        console.log(user);
+        const user = new User(phone,hashPassword(password.trim()), firstname, lastname,email);
         const createUser = await user.save();
 
         if (!createUser) throw new ApiError('Internal Server Error! Server failed creating new user.');
@@ -60,7 +59,7 @@ const login = AsyncHandler(async (req, res) => {
             token: generateToken(user.id),
             email: user.email,
             firstname: user.firstname,
-            lastname: user.lastname
+            lastname: user.lastname,
         };
 
         res.status(StatusCodes.OK).json(ApiResponse('User logged in successfully.', responseData));
