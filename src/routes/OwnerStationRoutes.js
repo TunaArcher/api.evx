@@ -3,7 +3,7 @@ core
 ==============================*/
 const express = require('express');
 const router = express.Router();
-const UserController = require('../controllers/UserController');
+const OwnerStationController = require('../controllers/OwnerStationController');
 
 /*==============================
 helper
@@ -18,10 +18,8 @@ Middleware
 /*==============================
 Router
 ==============================*/
-// router.get('/', HandleBadRequest, UserController.getAllUsers);
-router.get('/:id', HandleBadRequest, UserController.getUser);
-router.post('/create', HandleBadRequest, UserController.createUser);
-router.post('/update', HandleBadRequest, UserController.updateUser);
-router.post('/changePassword', HandleBadRequest, UserController.changePassword);
+router.get('/', HandleBadRequest, OwnerStationController.getAllOwnerStations);
+router.get('/:id', HandleBadRequest, OwnerStationController.getOwnerStation);
+router.post('/update', HandleBadRequest, OwnerStationController.updateOwnerStation);
 
 module.exports = router;

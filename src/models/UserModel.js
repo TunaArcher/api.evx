@@ -2,12 +2,11 @@ const pool = require('../config/db');
 // const { logger } = require('../utils/logger')
 
 class User {
-    constructor(phone, password, firstname, lastname, email = '') {
+    constructor(phone, password, fullname, email = '') {
         this._phone = phone;
         this._password = password;
-        this._firstName = firstname;
-        this._lastName = lastname;
-        this._email = email;
+        this._fullname = fullname;
+        this._phone = phone;
     }
 
     get phone() {
@@ -23,20 +22,12 @@ class User {
         this._phone = phone;
     }
 
-    get firstName() {
-        return this._firstName;
+    get fullname() {
+        return this._fullname;
     }
 
-    set firstName(firstName) {
-        this._firstName = firstName;
-    }
-
-    get lastName() {
-        return this._lastName;
-    }
-
-    set lastName(lastName) {
-        this._lastName = lastName;
+    set fullname(fullname) {
+        this._fullname = fullname;
     }
 
     get email() {
@@ -59,8 +50,8 @@ class User {
     async save() {
         try {
             const sql = `
-                INSERT INTO users (phone, password, firstname, lastname, email) 
-                VALUES ('${this.phone}', '${this.password}', '${this.firstName}', '${this.lastName}', '${this.email}')
+                INSERT INTO users (phone, password, fullname, email) 
+                VALUES ('${this.phone}', '${this.password}', '${this.fullname}', '${this.email}')
             `;
             return await pool.execute(sql);
         } catch (e) {
@@ -88,8 +79,9 @@ class User {
     }
 
     static async findByIdAndUpdate(id, options) {
-        const sql = `UPDATE users SET firstname = "${options.firstName}", lastName = "${options.lastName}", email = ${options.email} WHERE id = "${id}"`;
-        await pool.execute(sql);
+        const sql = `UPDATE users SET fullname = '${options.fullname}' WHERE id = ${id}`;
+        const [response] = await pool.execute(sql);
+        return response.affectedRows;
     }
 
     static async findByIdAndDelete(id) {

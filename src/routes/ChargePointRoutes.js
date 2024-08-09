@@ -3,7 +3,7 @@ core
 ==============================*/
 const express = require('express');
 const router = express.Router();
-const UserController = require('../controllers/UserController');
+const ChargePointController = require('../controllers/ChargePointController');
 
 /*==============================
 helper
@@ -18,10 +18,9 @@ Middleware
 /*==============================
 Router
 ==============================*/
-// router.get('/', HandleBadRequest, UserController.getAllUsers);
-router.get('/:id', HandleBadRequest, UserController.getUser);
-router.post('/create', HandleBadRequest, UserController.createUser);
-router.post('/update', HandleBadRequest, UserController.updateUser);
-router.post('/changePassword', HandleBadRequest, UserController.changePassword);
+router.get('/', HandleBadRequest, ChargePointController.getAllChargePoints);
+router.get('/:id', HandleBadRequest, ChargePointController.getChargePoint);
+router.post('/status', HandleBadRequest, ChargePointController.getChargePointByStatus);
+router.post('/update', HandleBadRequest, ChargePointController.updateChargePoint);
 
 module.exports = router;

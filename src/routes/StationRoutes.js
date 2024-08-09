@@ -3,7 +3,7 @@ core
 ==============================*/
 const express = require('express');
 const router = express.Router();
-const ProfileController = require('../controllers/ProfileController');
+const StationController = require('../controllers/StationController');
 
 /*==============================
 helper
@@ -18,9 +18,8 @@ Middleware
 /*==============================
 Router
 ==============================*/
-router.post('/update_profile', HandleBadRequest, ProfileController.updateProfile);
-router.post('/get_profile', HandleBadRequest, ProfileController.porfileData);
-router.post('/update_password', HandleBadRequest, ProfileController.updatePassword);
-
+router.get('/', HandleBadRequest, StationController.getAllStations);
+router.get('/:id', HandleBadRequest, StationController.getStation);
+router.post('/update', HandleBadRequest, StationController.updateStation);
 
 module.exports = router;
