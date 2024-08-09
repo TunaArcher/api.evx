@@ -3,18 +3,16 @@ const { StatusCodes } = require('http-status-codes');
 const ApiError = require('./error/ApiError');
 const ApiResponse = require('./response/ApiResponse');
 
-const Service = require('../models/ServiceModel');
-const Booking = require('../models/BookingModel');
 const Deposit = require('../models/DepositModel');
 
 const { options } = require('joi');
 const { log } = require('winston');
 
-const getReportHistoryServiced = AsyncHandler(async (req, res) => {
+const getAllDeposit = AsyncHandler(async (req, res) => {
     try {
-        const serviced = await Service.find();
+        const deposits = await Deposit.find();
 
-        const responseData = serviced;
+        const responseData = deposits;
 
         res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData));
     } catch (err) {
@@ -22,21 +20,11 @@ const getReportHistoryServiced = AsyncHandler(async (req, res) => {
     }
 });
 
-const getReportBooking = AsyncHandler(async (req, res) => {
+const getDeposit = AsyncHandler(async (req, res) => {
+    const id = req.params.id;
+
     try {
-        const booking = await Booking.find();
-
-        const responseData = booking;
-
-        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData));
-    } catch (err) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
-    }
-});
-
-const getReportTopup = AsyncHandler(async (req, res) => {
-    try {
-        const deposit = await Deposit.find();
+        const deposit = await Deposit.findById(id);
 
         const responseData = deposit;
 
@@ -46,8 +34,28 @@ const getReportTopup = AsyncHandler(async (req, res) => {
     }
 });
 
+const updateDeposit = AsyncHandler(async (req, res) => {
+    const { id, status } = req.body;
+
+    let options = {
+        status: status,
+    };
+
+    try {
+        const update = await Deposit.findByIdAndUpdate(id, options);
+
+        if (!update) throw new ApiError('Internal Server Error! Server failed creating update User.');
+
+        const responseData = {};
+
+        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData, StatusCodes.OK));
+    } catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
+    }
+});
+
 module.exports = {
-    getReportHistoryServiced,
-    getReportBooking,
-    getReportTopup,
+    getAllDeposit,
+    getDeposit,
+    updateDeposit,
 };

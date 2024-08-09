@@ -17,7 +17,8 @@ const UserRoutes = require('./UserRoutes');
 const OwnerStationRoutes = require('./OwnerStationRoutes');
 const StationRoutes = require('./StationRoutes');
 const ChargePointRoutes = require('./ChargePointRoutes');
-
+const DepositRoutes = require('./DepositRoutes');
+const WithdrawRoutes = require('./WithdrawRoutes');
 const ReportRoutes = require('./ReportRoutes');
 
 // assign prefix - to routes
@@ -35,6 +36,15 @@ router.use('/station', StationRoutes);
 
 // สถานี
 router.use('/charge-point', ChargePointRoutes);
+
+// การจอง
+// router.use('/booking', BookingRoutes);
+
+/** Topup **/
+// เติมเงิน
+router.use('/deposit', DepositRoutes);
+// หักเงิน
+router.use('/withdraw', WithdrawRoutes);
 
 // รายงาน
 router.use('/report', ReportRoutes);

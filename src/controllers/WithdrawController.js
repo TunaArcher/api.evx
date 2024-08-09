@@ -3,18 +3,16 @@ const { StatusCodes } = require('http-status-codes');
 const ApiError = require('./error/ApiError');
 const ApiResponse = require('./response/ApiResponse');
 
-const Service = require('../models/ServiceModel');
-const Booking = require('../models/BookingModel');
-const Deposit = require('../models/DepositModel');
+const Withdraw = require('../models/WithdrawModel');
 
 const { options } = require('joi');
 const { log } = require('winston');
 
-const getReportHistoryServiced = AsyncHandler(async (req, res) => {
+const getAllWithdraw = AsyncHandler(async (req, res) => {
     try {
-        const serviced = await Service.find();
+        const withdraws = await Withdraw.find();
 
-        const responseData = serviced;
+        const responseData = withdraws;
 
         res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData));
     } catch (err) {
@@ -22,11 +20,13 @@ const getReportHistoryServiced = AsyncHandler(async (req, res) => {
     }
 });
 
-const getReportBooking = AsyncHandler(async (req, res) => {
-    try {
-        const booking = await Booking.find();
+const getWithdraw = AsyncHandler(async (req, res) => {
+    const id = req.params.id;
 
-        const responseData = booking;
+    try {
+        const withdraw = await Withdraw.findById(id);
+
+        const responseData = withdraw;
 
         res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData));
     } catch (err) {
@@ -34,20 +34,28 @@ const getReportBooking = AsyncHandler(async (req, res) => {
     }
 });
 
-const getReportTopup = AsyncHandler(async (req, res) => {
+const updateWithdraw = AsyncHandler(async (req, res) => {
+    const { id, status } = req.body;
+
+    let options = {
+        status: status,
+    };
+
     try {
-        const deposit = await Deposit.find();
+        const update = await Withdraw.findByIdAndUpdate(id, options);
 
-        const responseData = deposit;
+        if (!update) throw new ApiError('Internal Server Error! Server failed creating update User.');
 
-        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData));
+        const responseData = {};
+
+        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }
 });
 
 module.exports = {
-    getReportHistoryServiced,
-    getReportBooking,
-    getReportTopup,
+    getAllWithdraw,
+    getWithdraw,
+    updateWithdraw,
 };

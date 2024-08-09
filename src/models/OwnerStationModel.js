@@ -23,7 +23,6 @@ class OwnerStation {
             SET description = '${options.description}' 
             WHERE id = ${id}
         `;
-        console.log(sql);
         const [response] = await pool.execute(sql);
         return response.affectedRows;
     }

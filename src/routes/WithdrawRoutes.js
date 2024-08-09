@@ -3,7 +3,7 @@ core
 ==============================*/
 const express = require('express');
 const router = express.Router();
-const ReportController = require('../controllers/ReportController');
+const WithdrawController = require('../controllers/WithdrawController');
 
 /*==============================
 helper
@@ -18,13 +18,8 @@ Middleware
 /*==============================
 Router
 ==============================*/
-// Service
-router.get('/history-serviced', HandleBadRequest, ReportController.getReportHistoryServiced);
-
-// Booking
-router.get('/booking', HandleBadRequest, ReportController.getReportBooking);
-
-// Topup
-router.get('/topup', HandleBadRequest, ReportController.getReportTopup);
+router.get('/', HandleBadRequest, WithdrawController.getAllWithdraw);
+router.get('/:id', HandleBadRequest, WithdrawController.getWithdraw);
+router.post('/update', HandleBadRequest, WithdrawController.updateWithdraw);
 
 module.exports = router;
