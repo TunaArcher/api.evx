@@ -44,10 +44,16 @@ const getUser = AsyncHandler(async (req, res) => {
 });
 
 const createUser = AsyncHandler(async (req, res) => {
-    const { phone, password, fullname, email } = req.body;
+    const { email, password } = req.body;
+
+    const isHaveUser = await User.findByEmail(email);
+
+    if (isHaveUser) {
+        return res.status(StatusCodes.OK).json(ApiResponse('User already.', '', 999));
+    }
 
     try {
-        const user = new User(phone, hashPassword(password.trim()), fullname, email);
+        const user = new User(email, password);
         const createUser = await user.save();
 
         if (!createUser) throw new ApiError('Internal Server Error! Server failed creating new user.');

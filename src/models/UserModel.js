@@ -2,32 +2,9 @@ const pool = require('../config/db');
 // const { logger } = require('../utils/logger')
 
 class User {
-    constructor(phone, password, fullname, email = '') {
-        this._phone = phone;
+    constructor(email, password) {
+        this._email = email;
         this._password = password;
-        this._fullname = fullname;
-        this._phone = phone;
-    }
-
-    get phone() {
-        return this._phone;
-    }
-
-    set phone(phone) {
-        if (!phone) throw new Error('Invalid phone value.');
-
-        phone = phone.trim();
-        if (phone === '') throw new Error('Invalid phone value.');
-
-        this._phone = phone;
-    }
-
-    get fullname() {
-        return this._fullname;
-    }
-
-    set fullname(fullname) {
-        this._fullname = fullname;
     }
 
     get email() {
@@ -50,9 +27,10 @@ class User {
     async save() {
         try {
             const sql = `
-                INSERT INTO users (phone, password, fullname, email) 
-                VALUES ('${this.phone}', '${this.password}', '${this.fullname}', '${this.email}')
+                INSERT INTO users (email, password, username) 
+                VALUES ('${this.email}', '${this.password}', '${this.email}')
             `;
+            console.log(sql);
             return await pool.execute(sql);
         } catch (e) {
             if (e.code === 'ER_DUP_ENTRY') return false;
@@ -74,6 +52,12 @@ class User {
 
     static async findByPhone(phone) {
         const sql = `SELECT * FROM users WHERE phone = '${phone}'`;
+        const [rows] = await pool.execute(sql);
+        return rows[0];
+    }
+
+    static async findByEmail(email) {
+        const sql = `SELECT * FROM users WHERE email = '${email}'`;
         const [rows] = await pool.execute(sql);
         return rows[0];
     }
