@@ -1,38 +1,59 @@
+const { JWT_SECRET, JWT_SECRET_REFRESH_TOKEN } = require('../utils/secrets');
+
 const jwt = require('jsonwebtoken');
 const AsyncHandler = require('express-async-handler');
-const User = require('../models/UserModel');
 const AuthError = require('./error/AuthError');
 
-const Auth = AsyncHandler(async (request, response, next) => {
+const catchError = (err, res) => {
+    if (err instanceof TokenExpiredError)
+        return res.status(401).send({ message: 'Unauthorized! Access Token expired!' });
+
+    return res.sendStatus(401).send({ message: 'Unauthorized!' });
+};
+
+const jwtValidate = AsyncHandler(async (req, res, next) => {
     let token;
 
-    if (request.headers.authorization && request.headers.authorization.startsWith('Bearer')) {
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
             // extract token
-            token = request.headers.authorization.split(' ')[1];
-
-            console.log(jwt.verify(token, process.env.JWT_SECRET_KEY))
+            token = req.headers.authorization.split(' ')[1];
 
             // verify token
-            const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
+            jwt.verify(token, JWT_SECRET, (err, decoded) => {
+                if (err) return catchError(err, res);
 
-            // get user from token
-            request.user = await User.findById(decode.id);
+                req.userId = decoded.id;
 
-            next();
+                next();
+            });
         } catch (e) {
-
-            if (process.env.ENVIRONMENT === 'development') {
-                console.log(e);
-            }
-            
-            throw new AuthError('User Not Authorized');
+            throw new AuthError('Unauthorized');
         }
     }
 
-    if (!token) {
-        throw new AuthError('User Not Authorized, JWT Token not found');
+    if (!token) throw new AuthError('Unauthorized, JWT Token not found');
+});
+
+const jwtRefreshTokenValidate = AsyncHandler(async (req, res, next) => {
+    try {
+        if (!req.headers['authorization']) return res.sendStatus(401);
+        const token = req.headers['authorization'].replace('Bearer ', '');
+        jwt.verify(token, JWT_SECRET_REFRESH_TOKEN, (err, decoded) => {
+            if (err) throw new Error(error);
+
+            req.user = decoded;
+            req.user.token = token;
+            delete req.user.exp;
+            delete req.user.iat;
+        });
+        next();
+    } catch (error) {
+        return res.sendStatus(403);
     }
 });
 
-module.exports = Auth;
+module.exports = {
+    jwtValidate,
+    jwtRefreshTokenValidate,
+};

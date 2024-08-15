@@ -7,7 +7,6 @@ const User = require('../models/UserModel');
 const Password = require('../models/PasswordModels');
 
 const { hash: hashPassword, compare: comparePassword } = require('../utils/password');
-const { generate: generateToken } = require('../utils/token');
 const { options } = require('joi');
 const { log } = require('winston');
 
@@ -53,14 +52,12 @@ const createUser = AsyncHandler(async (req, res) => {
     }
 
     try {
-        const user = new User(email, password);
+        const user = new User(email, hashPassword(password.trim()));
         const createUser = await user.save();
 
         if (!createUser) throw new ApiError('Internal Server Error! Server failed creating new user.');
 
-        const responseData = {
-            token: generateToken(createUser.insertId),
-        };
+        const responseData = {};
 
         res.status(StatusCodes.CREATED).json(
             ApiResponse('User registered successfully.', responseData, StatusCodes.CREATED)
@@ -82,9 +79,7 @@ const updateUser = AsyncHandler(async (req, res) => {
 
         if (!update) throw new ApiError('Internal Server Error! Server failed creating update User.');
 
-        const responseData = {
-            token_update: generateToken(id),
-        };
+        const responseData = {};
 
         res.status(StatusCodes.OK).json(ApiResponse('User updated successfully.', responseData, StatusCodes.OK));
     } catch (err) {
@@ -107,9 +102,7 @@ const changePassword = AsyncHandler(async (req, res) => {
 
         if (!changePassword) throw new ApiError('Internal Server Error! Server failed creating update User.');
 
-        const responseData = {
-            token_update: generateToken(id),
-        };
+        const responseData = {};
 
         res.status(StatusCodes.OK).json(ApiResponse('password updated successfully.', responseData, StatusCodes.OK));
     } catch (err) {

@@ -30,7 +30,6 @@ class User {
                 INSERT INTO users (email, password, username) 
                 VALUES ('${this.email}', '${this.password}', '${this.email}')
             `;
-            console.log(sql);
             return await pool.execute(sql);
         } catch (e) {
             if (e.code === 'ER_DUP_ENTRY') return false;
