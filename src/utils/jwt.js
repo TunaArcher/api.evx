@@ -15,9 +15,10 @@ const generate = (user) => {
 };
 
 const refreshTokenGenerate = async (user) => {
-    let expiredAt = new Date();
 
-    expiredAt.setSeconds(expiredAt.getSeconds() + 3600);
+    let expiredAt = new Date(new Date().toString())
+
+    expiredAt.setSeconds(expiredAt.getSeconds() + 86400);
 
     const refreshToken = jwt.sign({ id: user.id }, JWT_SECRET_REFRESH_TOKEN, {
         expiresIn: '1d',
@@ -26,7 +27,7 @@ const refreshTokenGenerate = async (user) => {
 
     let userId = user.id;
     // let expiryDate = expiredAt.getTime();
-    let expiryDate = expiredAt.toISOString().slice(0, 19).replace('T', ' ');
+    let expiryDate = expiredAt.toISOString().slice(0, 19).replace('T', ' '); 
 
     const userToken = new UserToken(userId, refreshToken, expiryDate);
     await userToken.save();

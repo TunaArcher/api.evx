@@ -9,6 +9,7 @@ const DepositController = require('../controllers/DepositController');
 helper
 ==============================*/
 const HandleBadRequest = require('../middlewares/HandleBadRequestMiddleware');
+const AuthMiddleware = require('../middlewares/AuthMiddleware');
 
 /*==============================
 Middleware
@@ -18,8 +19,8 @@ Middleware
 /*==============================
 Router
 ==============================*/
-router.get('/', HandleBadRequest, DepositController.getAllDeposit);
-router.get('/:id', HandleBadRequest, DepositController.getDeposit);
-router.post('/update', HandleBadRequest, DepositController.updateDeposit);
+router.get('/', AuthMiddleware.jwtValidate, HandleBadRequest, DepositController.getAllDeposit);
+router.get('/:id', AuthMiddleware.jwtValidate, HandleBadRequest, DepositController.getDeposit);
+router.post('/update', AuthMiddleware.jwtValidate, HandleBadRequest, DepositController.updateDeposit);
 
 module.exports = router;

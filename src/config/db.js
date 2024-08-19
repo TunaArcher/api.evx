@@ -13,6 +13,7 @@ const connectionOptions = {
     database: DB_NAME,
     user: DB_USERNAME,
     password: DB_USERNAME_PASSWORD,
+    timezone: 'Asia/Bangkok'
 };
 
 const pool = mysql.createPool(connectionOptions);

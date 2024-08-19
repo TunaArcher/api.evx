@@ -9,6 +9,7 @@ const OwnerStationController = require('../controllers/OwnerStationController');
 helper
 ==============================*/
 const HandleBadRequest = require('../middlewares/HandleBadRequestMiddleware');
+const AuthMiddleware = require('../middlewares/AuthMiddleware');
 
 /*==============================
 Middleware
@@ -18,8 +19,8 @@ Middleware
 /*==============================
 Router
 ==============================*/
-router.get('/', HandleBadRequest, OwnerStationController.getAllOwnerStations);
-router.get('/:id', HandleBadRequest, OwnerStationController.getOwnerStation);
-router.post('/update', HandleBadRequest, OwnerStationController.updateOwnerStation);
+router.get('/', AuthMiddleware.jwtValidate, HandleBadRequest, OwnerStationController.getAllOwnerStations);
+router.get('/:id', AuthMiddleware.jwtValidate, HandleBadRequest, OwnerStationController.getOwnerStation);
+router.post('/update', AuthMiddleware.jwtValidate, HandleBadRequest, OwnerStationController.updateOwnerStation);
 
 module.exports = router;

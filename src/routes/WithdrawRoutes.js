@@ -9,6 +9,7 @@ const WithdrawController = require('../controllers/WithdrawController');
 helper
 ==============================*/
 const HandleBadRequest = require('../middlewares/HandleBadRequestMiddleware');
+const AuthMiddleware = require('../middlewares/AuthMiddleware');
 
 /*==============================
 Middleware
@@ -18,8 +19,8 @@ Middleware
 /*==============================
 Router
 ==============================*/
-router.get('/', HandleBadRequest, WithdrawController.getAllWithdraw);
-router.get('/:id', HandleBadRequest, WithdrawController.getWithdraw);
-router.post('/update', HandleBadRequest, WithdrawController.updateWithdraw);
+router.get('/', AuthMiddleware.jwtValidate, HandleBadRequest, WithdrawController.getAllWithdraw);
+router.get('/:id', AuthMiddleware.jwtValidate, HandleBadRequest, WithdrawController.getWithdraw);
+router.post('/update', AuthMiddleware.jwtValidate, HandleBadRequest, WithdrawController.updateWithdraw);
 
 module.exports = router;
