@@ -4,32 +4,33 @@ const jwt = require('jsonwebtoken');
 const AsyncHandler = require('express-async-handler');
 const AuthError = require('./error/AuthError');
 
-const catchError = (err, res) => {
-    if (err instanceof TokenExpiredError)
-        return res.status(401).send({ message: 'Unauthorized! Access Token expired!' });
+const { TokenExpiredError } = jwt;
+const { StatusCodes } = require('http-status-codes');
 
-    return res.sendStatus(401).send({ message: 'Unauthorized!' });
+const catchError = (err, res) => {
+    if (err instanceof TokenExpiredError) {
+        throw new AuthError('Unauthorized! Access Token expired!', StatusCodes.UNAUTHORIZED);
+    }
+
+    throw new AuthError('Unauthorized!', StatusCodes.FORBIDDEN);
 };
 
 const jwtValidate = AsyncHandler(async (req, res, next) => {
     let token;
 
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-        try {
-            // extract token
-            token = req.headers.authorization.split(' ')[1];
+        // extract token
+        token = req.headers.authorization.split(' ')[1];
 
-            // verify token
-            jwt.verify(token, JWT_SECRET, (err, decoded) => {
-                if (err) return catchError(err, res);
+        // verify token
+        jwt.verify(token, JWT_SECRET, (err, decoded) => {
+            
+            if (err) return catchError(err, res);
 
-                req.userId = decoded.id;
+            req.userId = decoded.id;
 
-                next();
-            });
-        } catch (e) {
-            throw new AuthError('Unauthorized');
-        }
+            next();
+        });
     }
 
     if (!token) throw new AuthError('Unauthorized, JWT Token not found');

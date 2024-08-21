@@ -28,6 +28,9 @@ const getUser = AsyncHandler(async (req, res) => {
     try {
         const user = await User.findById(id);
 
+        // ไม่เจอยูส
+        if (!user) return res.status(StatusCodes.OK).json(ApiResponse('User Not Found.', '', 999));
+
         const responseData = {
             id: user.id,
             phone: user.phone,
@@ -47,9 +50,8 @@ const createUser = AsyncHandler(async (req, res) => {
 
     const isHaveUser = await User.findByEmail(email);
 
-    if (isHaveUser) {
-        return res.status(StatusCodes.OK).json(ApiResponse('User already.', '', 999));
-    }
+    // มียูสแล้ว
+    if (isHaveUser) return res.status(StatusCodes.OK).json(ApiResponse('User already.', '', 999));
 
     try {
         const user = new User(email, hashPassword(password.trim()));
