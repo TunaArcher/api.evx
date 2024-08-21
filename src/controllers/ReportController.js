@@ -16,7 +16,7 @@ const getReportHistoryServiced = AsyncHandler(async (req, res) => {
 
         const responseData = serviced;
 
-        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData));
+        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }
@@ -28,7 +28,7 @@ const getReportBooking = AsyncHandler(async (req, res) => {
 
         const responseData = booking;
 
-        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData));
+        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }
@@ -40,7 +40,7 @@ const getReportTopup = AsyncHandler(async (req, res) => {
 
         const responseData = deposit;
 
-        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData));
+        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }

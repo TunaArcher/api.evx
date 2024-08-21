@@ -14,7 +14,7 @@ const getAllOwnerStations = AsyncHandler(async (req, res) => {
 
         const responseData = OwnerStations;
 
-        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData));
+        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }
@@ -28,7 +28,7 @@ const getOwnerStation = AsyncHandler(async (req, res) => {
 
         const responseData = ownerStation;
 
-        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData));
+        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }
@@ -44,13 +44,11 @@ const updateOwnerStation = AsyncHandler(async (req, res) => {
     try {
         const update = await OwnerStation.findByIdAndUpdate(id, options);
 
-        if (!update) throw new ApiError('Internal Server Error! Server failed creating update User.');
+        if (!update) throw new ApiError('Internal Server Error! Server failed update owner station.');
 
         const responseData = {};
 
-        res.status(StatusCodes.OK).json(
-            ApiResponse('successfully.', responseData, StatusCodes.OK)
-        );
+        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }

@@ -14,7 +14,7 @@ const getAllWithdraw = AsyncHandler(async (req, res) => {
 
         const responseData = withdraws;
 
-        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData));
+        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }
@@ -28,7 +28,7 @@ const getWithdraw = AsyncHandler(async (req, res) => {
 
         const responseData = withdraw;
 
-        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData));
+        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }

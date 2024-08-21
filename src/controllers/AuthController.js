@@ -37,7 +37,7 @@ const login = AsyncHandler(async (req, res) => {
             refreshToken: refreshToken,
         };
 
-        res.status(StatusCodes.OK).json(ApiResponse('User logged in successfully.', responseData));
+        res.status(StatusCodes.OK).json(ApiResponse('User logged in successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }
@@ -92,7 +92,7 @@ const refresh = AsyncHandler(async (req, res) => {
             refreshToken: refreshToken,
         };
 
-        res.status(StatusCodes.OK).json(ApiResponse('User logged in successfully.', responseData));
+        res.status(StatusCodes.OK).json(ApiResponse('User logged in successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }

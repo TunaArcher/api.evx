@@ -39,7 +39,7 @@ const getUser = AsyncHandler(async (req, res) => {
             fullname: user.fullname,
         };
 
-        res.status(StatusCodes.OK).json(ApiResponse('User Get is successfully.', responseData));
+        res.status(StatusCodes.OK).json(ApiResponse('User Get is successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }
@@ -61,9 +61,7 @@ const createUser = AsyncHandler(async (req, res) => {
 
         const responseData = {};
 
-        res.status(StatusCodes.CREATED).json(
-            ApiResponse('User registered successfully.', responseData, StatusCodes.CREATED)
-        );
+        res.status(StatusCodes.CREATED).json(ApiResponse('User registered successfully.', responseData, StatusCodes.CREATED));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }
@@ -102,7 +100,7 @@ const changePassword = AsyncHandler(async (req, res) => {
     try {
         const changePassword = await Password.findByIdAndUpdatePassword(id, options);
 
-        if (!changePassword) throw new ApiError('Internal Server Error! Server failed creating update User.');
+        if (!changePassword) throw new ApiError('Internal Server Error! Server failed update password.');
 
         const responseData = {};
 

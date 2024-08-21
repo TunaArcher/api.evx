@@ -14,7 +14,7 @@ const getAllDeposit = AsyncHandler(async (req, res) => {
 
         const responseData = deposits;
 
-        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData));
+        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }
@@ -28,7 +28,7 @@ const getDeposit = AsyncHandler(async (req, res) => {
 
         const responseData = deposit;
 
-        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData));
+        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }
@@ -44,7 +44,7 @@ const updateDeposit = AsyncHandler(async (req, res) => {
     try {
         const update = await Deposit.findByIdAndUpdate(id, options);
 
-        if (!update) throw new ApiError('Internal Server Error! Server failed creating update User.');
+        if (!update) throw new ApiError('Internal Server Error! Server failed update deposit.');
 
         const responseData = {};
 

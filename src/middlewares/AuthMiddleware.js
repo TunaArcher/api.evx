@@ -9,7 +9,7 @@ const { StatusCodes } = require('http-status-codes');
 
 const catchError = (err, res) => {
     if (err instanceof TokenExpiredError) {
-        throw new AuthError('Unauthorized! Access Token expired!', StatusCodes.UNAUTHORIZED);
+        throw new AuthError('Access Token expired!', StatusCodes.UNAUTHORIZED);
     }
 
     throw new AuthError('Unauthorized!', StatusCodes.FORBIDDEN);
@@ -32,28 +32,24 @@ const jwtValidate = AsyncHandler(async (req, res, next) => {
         });
     }
 
-    if (!token) throw new AuthError('Unauthorized, JWT Token not found');
+    if (!token) throw new AuthError('Unauthorized!, JWT Token not found', StatusCodes.UNAUTHORIZED);
 });
 
 const jwtRefreshTokenValidate = AsyncHandler(async (req, res, next) => {
-    try {
-        if (!req.headers['authorization']) return res.sendStatus(401);
+    if (!req.headers['authorization']) throw new AuthError('Unauthorized!', StatusCodes.UNAUTHORIZED);
 
-        const token = req.headers['authorization'].replace('Bearer ', '');
+    const token = req.headers['authorization'].replace('Bearer ', '');
 
-        jwt.verify(token, JWT_SECRET_REFRESH_TOKEN, (err, decoded) => {
-            if (err) throw new Error(error);
+    jwt.verify(token, JWT_SECRET_REFRESH_TOKEN, (err, decoded) => {
+        if (err) return catchError(err, res);
 
-            req.user = decoded;
-            req.user.token = token;
-            delete req.user.exp;
-            delete req.user.iat;
-        });
+        req.user = decoded;
+        req.user.token = token;
+        delete req.user.exp;
+        delete req.user.iat;
+    });
 
-        next();
-    } catch (error) {
-        return res.sendStatus(403);
-    }
+    next();
 });
 
 module.exports = {

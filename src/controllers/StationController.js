@@ -14,7 +14,7 @@ const getAllStations = AsyncHandler(async (req, res) => {
 
         const responseData = stations;
 
-        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData));
+        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }
@@ -28,7 +28,7 @@ const getStation = AsyncHandler(async (req, res) => {
 
         const responseData = station;
 
-        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData));
+        res.status(StatusCodes.OK).json(ApiResponse('successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }
@@ -44,7 +44,7 @@ const updateStation = AsyncHandler(async (req, res) => {
     try {
         const update = await Station.findByIdAndUpdate(id, options);
 
-        if (!update) throw new ApiError('Internal Server Error! Server failed creating update User.');
+        if (!update) throw new ApiError('Internal Server Error! Server failed update station.');
 
         const responseData = {};
 
