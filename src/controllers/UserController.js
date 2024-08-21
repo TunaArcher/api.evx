@@ -29,7 +29,7 @@ const getUser = AsyncHandler(async (req, res) => {
         const user = await User.findById(id);
 
         // ไม่เจอยูส
-        if (!user) return res.status(StatusCodes.OK).json(ApiResponse('User Not Found.', '', 999));
+        if (!user) throw new ApiError('Invalid credentials!', StatusCodes.UNAUTHORIZED);
 
         const responseData = {
             id: user.id,

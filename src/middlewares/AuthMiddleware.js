@@ -24,7 +24,6 @@ const jwtValidate = AsyncHandler(async (req, res, next) => {
 
         // verify token
         jwt.verify(token, JWT_SECRET, (err, decoded) => {
-            
             if (err) return catchError(err, res);
 
             req.userId = decoded.id;
@@ -39,7 +38,9 @@ const jwtValidate = AsyncHandler(async (req, res, next) => {
 const jwtRefreshTokenValidate = AsyncHandler(async (req, res, next) => {
     try {
         if (!req.headers['authorization']) return res.sendStatus(401);
+
         const token = req.headers['authorization'].replace('Bearer ', '');
+
         jwt.verify(token, JWT_SECRET_REFRESH_TOKEN, (err, decoded) => {
             if (err) throw new Error(error);
 
@@ -48,6 +49,7 @@ const jwtRefreshTokenValidate = AsyncHandler(async (req, res, next) => {
             delete req.user.exp;
             delete req.user.iat;
         });
+
         next();
     } catch (error) {
         return res.sendStatus(403);
