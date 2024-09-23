@@ -20,6 +20,7 @@ const ChargePointRoutes = require('./ChargePointRoutes');
 const DepositRoutes = require('./DepositRoutes');
 const WithdrawRoutes = require('./WithdrawRoutes');
 const ReportRoutes = require('./ReportRoutes');
+const SteveDataRoutes = require('./SteveDataRoutes');
 
 // assign prefix - to routes
 // การ Auth
@@ -48,5 +49,8 @@ router.use('/withdraw', WithdrawRoutes);
 
 // รายงาน
 router.use('/report', ReportRoutes);
+
+// ข้อมูล DB ตู้
+router.use('/ev_station', SteveDataRoutes);
 
 module.exports = router;
