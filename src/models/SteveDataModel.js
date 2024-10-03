@@ -1,4 +1,4 @@
-const {pool_steve} = require('../config/db');
+const { pool_steve } = require('../config/db');
 
 class SteveData {
     constructor() {}
@@ -23,6 +23,13 @@ class SteveData {
                     charge_box.charge_box_id = connector.charge_box_id
                     where  connector.charge_box_id = '${charge_box_id}' and connector_status.connector_pk = '${connector_pk}'
                     order by connector_status.status_timestamp DESC LIMIT 1;`;
+        const [rows, fields] = await pool_steve.execute(sql);
+        return rows[0];
+    }
+
+    static async findStartTrasectionLast(connector_pk, id_tag) {
+        const sql = `SELECT * FROM transaction_start where connector_pk = '${connector_pk}' and id_tag = '${id_tag}' 
+        order by transaction_pk DESC LIMIT 1;`;
         const [rows, fields] = await pool_steve.execute(sql);
         return rows[0];
     }

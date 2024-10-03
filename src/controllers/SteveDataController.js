@@ -43,7 +43,7 @@ const getConnecter = AsyncHandler(async (req, res) => {
 });
 
 const getConnecterStatus = AsyncHandler(async (req, res) => {
-    const { ev_chargepoint_name,  connector_pk} = req.body;
+    const { ev_chargepoint_name, connector_pk } = req.body;
 
     try {
         const connecter = await SteveData.findEVStationConnecterStatus(ev_chargepoint_name, connector_pk);
@@ -56,8 +56,23 @@ const getConnecterStatus = AsyncHandler(async (req, res) => {
     }
 });
 
+const getStartTransectionLast = AsyncHandler(async (req, res) => {
+    const { connector_pk, id_tag } = req.body;
+
+    try {
+        const connecter = await SteveData.findStartTrasectionLast(connector_pk, id_tag);
+
+        const responseData = connecter;
+
+        res.status(StatusCodes.OK).json(ApiResponse('Start Transections Get is successfully.', responseData));
+    } catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
+    }
+});
+
 module.exports = {
     getStation,
     getConnecter,
     getConnecterStatus,
+    getStartTransectionLast,
 };
