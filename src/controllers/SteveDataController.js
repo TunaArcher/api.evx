@@ -70,9 +70,38 @@ const getStartTransectionLast = AsyncHandler(async (req, res) => {
     }
 });
 
+const addTransection = AsyncHandler(async (req, res) => {
+    const { type, user_id, credit, transectionstate, cp_id, connecter_id, id_tag, transection_pk, connecter_pk } = req.body;
+
+    let options = {
+        type: type,
+        user_id: user_id,
+        credit: credit,
+        transectionstate: transectionstate,
+        cp_id: cp_id,
+        connecter_id: connecter_id,
+        id_tag: id_tag,
+        transection_pk: transection_pk,
+        connecter_pk: connecter_pk,
+    };
+
+    try {
+        const addTransection = await SteveData.insertTransection(options);
+
+        if (!addTransection) throw new ApiError('Internal Server Error! Server failed insert treansection.');
+
+        const responseData = {};
+
+        res.status(StatusCodes.OK).json(ApiResponse('insert treansection successfully.', responseData, StatusCodes.OK));
+    } catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
+    }
+});
+
 module.exports = {
     getStation,
     getConnecter,
     getConnecterStatus,
     getStartTransectionLast,
+    addTransection,
 };
