@@ -1,4 +1,5 @@
-const { pool_steve } = require('../config/db');
+const { log } = require('winston');
+const { pool_steve, pool } = require('../config/db');
 
 class SteveData {
     constructor() {}
@@ -32,6 +33,18 @@ class SteveData {
         order by transaction_pk DESC LIMIT 1;`;
         const [rows, fields] = await pool_steve.execute(sql);
         return rows[0];
+    }
+
+    static async insertTransection(options) {
+        try {
+            const sql = `
+                INSERT INTO transactions (type, user_id, credit,transectionstate, cp_id, connecter_id, id_tag, transection_pk, connecter_pk) 
+                VALUES ('${options.type}', '${options.user_id}', '${options.credit}', '${options.transectionstate}', '${options.cp_id}', '${options.connecter_id}', '${options.id_tag}', '${options.transection_pk}', '${options.connecter_pk}')`;
+
+            return await pool.execute(sql);
+        } catch (e) {
+            if (e.code === 'ER_DUP_ENTRY') return false;
+        }
     }
 }
 
