@@ -71,7 +71,8 @@ const getStartTransectionLast = AsyncHandler(async (req, res) => {
 });
 
 const addTransection = AsyncHandler(async (req, res) => {
-    const { type, user_id, credit, transectionstate, cp_id, connecter_id, id_tag, transection_pk, connecter_pk } = req.body;
+    const { type, user_id, credit, transectionstate, cp_id, connecter_id, id_tag, transection_pk, connecter_pk } =
+        req.body;
 
     let options = {
         type: type,
@@ -98,10 +99,96 @@ const addTransection = AsyncHandler(async (req, res) => {
     }
 });
 
+const getActiveChecgerData = AsyncHandler(async (req, res) => {
+    const { transaction_pk } = req.body;
+
+    let options = {
+        transaction_pk: transaction_pk,
+        // measurand: measurand
+    };
+
+    try {
+        const getActiveChecgerData = await SteveData.getActiveChecgerData(options);
+
+        if (!getActiveChecgerData) throw new ApiError('Internal Server Error! Server failed get active data.');
+
+        const responseData = getActiveChecgerData;
+
+        res.status(StatusCodes.OK).json(ApiResponse('get active data successfully.', responseData, StatusCodes.OK));
+    } catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
+    }
+});
+
+const getActiveTransections = AsyncHandler(async (req, res) => {
+    const { user_id } = req.body;
+
+    let options = {
+        user_id: user_id,
+        // measurand: measurand
+    };
+
+    try {
+        const getActiveTransections = await SteveData.getActiveTransections(options);
+
+        if (!getActiveTransections) throw new ApiError('Internal Server Error! Server failed get active data.');
+
+        const responseData = getActiveTransections;
+
+        res.status(StatusCodes.OK).json(ApiResponse('get active data successfully.', responseData, StatusCodes.OK));
+    } catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
+    }
+});
+
+const getTransectionsFinish = AsyncHandler(async (req, res) => {
+    const { transactionId, state } = req.body;
+
+    let options = {
+        transection_pk: transactionId,
+    };
+
+    try {
+        const getTransectionsFinish = await SteveData.getTransectionsFinish(options);
+
+        if (!getTransectionsFinish) throw new ApiError('Internal Server Error! Server failed get active data.');
+
+        const responseData = getTransectionsFinish;
+
+        res.status(StatusCodes.OK).json(ApiResponse('get active data successfully.', responseData, StatusCodes.OK));
+    } catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
+    }
+});
+
+const getConnectorFinish = AsyncHandler(async (req, res) => {
+    const { connector_pk } = req.body;
+
+    let options = {
+        connector_pk: connector_pk,
+    };
+
+    try {
+        const getConnectorFinish = await SteveData.getConnectorFinish(options);
+
+        if (!getConnectorFinish) throw new ApiError('Internal Server Error! Server failed get connector data.');
+
+        const responseData = getConnectorFinish;
+
+        res.status(StatusCodes.OK).json(ApiResponse('get connector status successfully.', responseData, StatusCodes.OK));
+    } catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
+    }
+});
+
 module.exports = {
     getStation,
     getConnecter,
     getConnecterStatus,
     getStartTransectionLast,
     addTransection,
+    getActiveChecgerData,
+    getActiveTransections,
+    getTransectionsFinish,
+    getConnectorFinish,
 };

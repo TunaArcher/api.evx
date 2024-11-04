@@ -46,6 +46,30 @@ class SteveData {
             if (e.code === 'ER_DUP_ENTRY') return false;
         }
     }
+
+    static async getActiveChecgerData(options) {
+        const sql = `SELECT * FROM connector_meter_value where transaction_pk = '${options.transaction_pk}' and (measurand = 'Energy.Active.Import.Register' or  measurand = 'Power.Active.Import')
+        order by value_timestamp DESC LIMIT 2`;
+        const [rows, fields] = await pool_steve.execute(sql);
+        return rows;
+    }
+
+    static async getActiveTransections(options) {
+        const sql = `SELECT * FROM transactions where user_id = '${options.user_id}' order by id DESC limit 1`;
+        const [rows, fields] = await pool.execute(sql);
+        return rows[0];
+    }
+    static async getTransectionsFinish(options) {
+        const sql = `SELECT * FROM transactions where transection_pk = '${options.transection_pk}' order by id DESC`;
+        const [rows, fields] = await pool.execute(sql);
+        return rows;
+    }
+
+    static async getConnectorFinish(options) {
+        const sql = `SELECT * FROM connector_status where connector_pk = '${options.connector_pk}' order by status_timestamp DESC LIMIT 1`;
+        const [rows, fields] = await pool_steve.execute(sql);
+        return rows[0];
+    }
 }
 
 module.exports = SteveData;

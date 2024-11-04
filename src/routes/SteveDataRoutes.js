@@ -25,5 +25,9 @@ router.post('/getConnecter', HandleBadRequest, SteveDataController.getConnecter)
 router.post('/getConnecterStatus', HandleBadRequest, SteveDataController.getConnecterStatus);  
 router.post('/getStartTransectionLast', HandleBadRequest, SteveDataController.getStartTransectionLast);
 router.post('/addTransection', HandleBadRequest, SteveDataController.addTransection);
+router.post('/getActiveChecgerData', HandleBadRequest, SteveDataController.getActiveChecgerData);  
+router.post('/getActiveTransections', HandleBadRequest, SteveDataController.getActiveTransections); 
+router.post('/getTransectionsFinish', HandleBadRequest, SteveDataController.getTransectionsFinish);   
+router.post('/getConnectorFinish', HandleBadRequest, SteveDataController.getConnectorFinish); 
 
 module.exports = router;
