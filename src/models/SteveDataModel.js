@@ -70,6 +70,33 @@ class SteveData {
         const [rows, fields] = await pool_steve.execute(sql);
         return rows[0];
     }
+
+    static async getActivePriceKw() {
+        const sql = `SELECT * FROM price_kwh where status = 'ON' order by id DESC LIMIT 1;`;
+        const [rows, fields] = await pool.execute(sql);
+        return rows[0];
+    }
+
+    static async insertPriceKw(options) {
+        try {
+            const sql = `
+                INSERT INTO price_kwh (price_Kw, monetary_unit,status) 
+                VALUES ('${options.price_Kw}', '${options.monetary_unit}', 'ON')`;
+
+            return await pool.execute(sql);
+        } catch (e) {
+            if (e.code === 'ER_DUP_ENTRY') return false;
+        }
+    }
+
+    static async updatePriceKw(options) {
+        try {
+            const sql = `UPDATE price_kwh SET price_Kw = '${options.price_Kw}', monetary_unit = '${options.monetary_unit}', updated_at = now() WHERE id = ${options.id_price}`;
+            return await pool.execute(sql);
+        } catch (e) {
+            if (e.code === 'ER_DUP_ENTRY') return false;
+        }
+    }
 }
 
 module.exports = SteveData;
