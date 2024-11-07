@@ -175,7 +175,68 @@ const getConnectorFinish = AsyncHandler(async (req, res) => {
 
         const responseData = getConnectorFinish;
 
-        res.status(StatusCodes.OK).json(ApiResponse('get connector status successfully.', responseData, StatusCodes.OK));
+        res.status(StatusCodes.OK).json(
+            ApiResponse('get connector status successfully.', responseData, StatusCodes.OK)
+        );
+    } catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
+    }
+});
+
+const getActivePriceKw = AsyncHandler(async (req, res) => {
+    try {
+        const getActivePriceKw = await SteveData.getActivePriceKw();
+
+        if (!getActivePriceKw) throw new ApiError('Internal Server Error! Server failed get connector data.');
+
+        const responseData = getActivePriceKw;
+
+        res.status(StatusCodes.OK).json(
+            ApiResponse('get connector status successfully.', responseData, StatusCodes.OK)
+        );
+    } catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
+    }
+});
+
+const addnewPriceKw = AsyncHandler(async (req, res) => {
+    const { price_Kw, monetary_unit } = req.body;
+
+    let options = {
+        price_Kw: price_Kw,
+        monetary_unit: monetary_unit,
+    };
+
+    try {
+        const addnewPriceKw = await SteveData.insertPriceKw(options);
+
+        if (!addnewPriceKw) throw new ApiError('Internal Server Error! Server failed price.');
+
+        const responseData = {};
+
+        res.status(StatusCodes.OK).json(ApiResponse('insert price successfully.', responseData, StatusCodes.OK));
+    } catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
+    }
+});
+
+const updatePriceKw = AsyncHandler(async (req, res) => {
+    const { id_price, price_Kw, monetary_unit } = req.body;
+
+    let options = {
+        id_price: id_price,
+        price_Kw: price_Kw,
+        monetary_unit: monetary_unit,
+    };
+
+    try {
+        const updatePriceKw = await SteveData.updatePriceKw(options);
+
+        if (!updatePriceKw) throw new ApiError('Internal Server Error! Server failed update price.');
+
+        const responseData = {};
+
+        res.status(StatusCodes.OK).json(ApiResponse('update price successfully.', responseData, StatusCodes.OK));
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
     }
@@ -191,4 +252,7 @@ module.exports = {
     getActiveTransections,
     getTransectionsFinish,
     getConnectorFinish,
+    getActivePriceKw,
+    addnewPriceKw,
+    updatePriceKw,
 };

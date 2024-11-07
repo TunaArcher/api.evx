@@ -29,5 +29,8 @@ router.post('/getActiveChecgerData', HandleBadRequest, SteveDataController.getAc
 router.post('/getActiveTransections', HandleBadRequest, SteveDataController.getActiveTransections); 
 router.post('/getTransectionsFinish', HandleBadRequest, SteveDataController.getTransectionsFinish);   
 router.post('/getConnectorFinish', HandleBadRequest, SteveDataController.getConnectorFinish); 
+router.get('/getActivePriceKw', HandleBadRequest, SteveDataController.getActivePriceKw); 
+router.post('/addnewPriceKw', HandleBadRequest, SteveDataController.addnewPriceKw); 
+router.post('/updatePriceKw', HandleBadRequest, SteveDataController.updatePriceKw); 
 
 module.exports = router;
