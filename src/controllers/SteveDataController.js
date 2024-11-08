@@ -242,6 +242,35 @@ const updatePriceKw = AsyncHandler(async (req, res) => {
     }
 });
 
+const summaryChargerUser = AsyncHandler(async (req, res) => {
+    const { user_id, sum_price, sum_Kw, credit, cp_id, connecter_id, id_tag, transection_pk, connecter_pk, country } = req.body;
+
+    let options = {
+        user_id: user_id,
+        sum_price: sum_price,
+        sum_Kw: sum_Kw,
+        credit: credit,
+        cp_id: cp_id,
+        connecter_id: connecter_id,
+        id_tag: id_tag,
+        transection_pk: transection_pk,
+        connecter_pk: connecter_pk,
+        country: country,
+    };
+
+    try {
+        const summaryChargerUser = await SteveData.summaryChargerUser(options);
+
+        if (!summaryChargerUser) throw new ApiError('Internal Server Error! Server failed insert treansection.');
+
+        const responseData = {};
+
+        res.status(StatusCodes.OK).json(ApiResponse('insert treansection successfully.', responseData, StatusCodes.OK));
+    } catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ApiResponse('Internal Server Error'));
+    }
+});
+
 module.exports = {
     getStation,
     getConnecter,
@@ -255,4 +284,5 @@ module.exports = {
     getActivePriceKw,
     addnewPriceKw,
     updatePriceKw,
+    summaryChargerUser,
 };

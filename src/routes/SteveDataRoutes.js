@@ -32,5 +32,6 @@ router.post('/getConnectorFinish', HandleBadRequest, SteveDataController.getConn
 router.get('/getActivePriceKw', HandleBadRequest, SteveDataController.getActivePriceKw); 
 router.post('/addnewPriceKw', HandleBadRequest, SteveDataController.addnewPriceKw); 
 router.post('/updatePriceKw', HandleBadRequest, SteveDataController.updatePriceKw); 
+router.post('/summaryChargerUser', HandleBadRequest, SteveDataController.summaryChargerUser); 
 
 module.exports = router;
