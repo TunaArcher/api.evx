@@ -243,7 +243,19 @@ const updatePriceKw = AsyncHandler(async (req, res) => {
 });
 
 const summaryChargerUser = AsyncHandler(async (req, res) => {
-    const { user_id, sum_price, sum_Kw, credit, cp_id, connecter_id, id_tag, transection_pk, connecter_pk, country } = req.body;
+    const {
+        user_id,
+        sum_price,
+        sum_Kw,
+        credit,
+        cp_id,
+        connecter_id,
+        id_tag,
+        transection_pk,
+        connecter_pk,
+        country,
+        sum_min,
+    } = req.body;
 
     let options = {
         user_id: user_id,
@@ -256,6 +268,7 @@ const summaryChargerUser = AsyncHandler(async (req, res) => {
         transection_pk: transection_pk,
         connecter_pk: connecter_pk,
         country: country,
+        sum_min: sum_min,
     };
 
     try {
