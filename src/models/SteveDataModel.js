@@ -101,8 +101,8 @@ class SteveData {
     static async summaryChargerUser(options) {
         try {
             const sql = `
-                INSERT INTO summary_user_chager (user_id, sum_price, sum_Kw, credit, cp_id, connecter_id, id_tag, transection_pk, connecter_pk, country) 
-                VALUES ('${options.user_id}', '${options.sum_price}', '${options.sum_Kw}', '${options.credit}', '${options.cp_id}', '${options.connecter_id}', '${options.id_tag}', '${options.transection_pk}', '${options.connecter_pk}', '${options.country}')`;
+                INSERT INTO summary_user_chager (user_id, sum_price, sum_Kw, credit, cp_id, connecter_id, id_tag, transection_pk, connecter_pk, country, sum_min) 
+                VALUES ('${options.user_id}', '${options.sum_price}', '${options.sum_Kw}', '${options.credit}', '${options.cp_id}', '${options.connecter_id}', '${options.id_tag}', '${options.transection_pk}', '${options.connecter_pk}', '${options.country}', '${options.sum_min}')`;
 
             return await pool.execute(sql);
         } catch (e) {
