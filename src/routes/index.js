@@ -21,6 +21,7 @@ const DepositRoutes = require('./DepositRoutes');
 const WithdrawRoutes = require('./WithdrawRoutes');
 const ReportRoutes = require('./ReportRoutes');
 const SteveDataRoutes = require('./SteveDataRoutes');
+const MapRoutes = require('./MapRoutes');
 
 // assign prefix - to routes
 // การ Auth
@@ -52,5 +53,8 @@ router.use('/report', ReportRoutes);
 
 // ข้อมูล DB ตู้
 router.use('/ev_station', SteveDataRoutes);
+
+//Map Detail
+router.use('/map', MapRoutes);
 
 module.exports = router;
